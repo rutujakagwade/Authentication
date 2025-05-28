@@ -1,7 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRoutes from "../routes/authRoutes.js"; // adjust path
+import { PORT, MONGO_URI } from "./config.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
@@ -11,23 +12,14 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
 app.use("/api", authRoutes);
 
-let isConnected = false;
-
-// Vercel serverless handler
-const server = async (req, res) => {
-  if (!isConnected) {
-    try {
-      await mongoose.connect(process.env.MONGO_URI);
-      isConnected = true;
-    } catch (err) {
-      console.error("DB connection error:", err);
-      return res.status(500).send("DB connection failed");
-    }
-  }
-
-  app(req, res);
-};
-
-export default server;
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => console.log("DB Connection Error:", err));
