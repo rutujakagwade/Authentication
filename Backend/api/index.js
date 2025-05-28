@@ -1,32 +1,30 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRoutes from "../routes/authRoutes.js"; // adjust relative path as needed
+import authRoutes from "../routes/authRoutes.js";
 
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://your-frontend.vercel.app", // adjust if needed
   credentials: true,
 }));
-
 app.use(express.json());
-
 app.use("/api", authRoutes);
 
+// Avoid multiple DB connections
 let isConnected = false;
 
-async function handler(req, res) {
+export default async function handler(req, res) {
   if (!isConnected) {
     try {
       await mongoose.connect(process.env.MONGO_URI);
       isConnected = true;
     } catch (err) {
       console.error("DB connection error:", err);
-      return res.status(500).send("Database connection failed");
+      return res.status(500).send("DB error");
     }
   }
-  app(req, res);
-}
 
-export default handler;
+  return app(req, res);
+}
