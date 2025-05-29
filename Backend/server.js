@@ -1,20 +1,23 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import { PORT, MONGO_URI } from "./config.js";
+import { PORT, MONGO_URI } from "./config/config.js";
 import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
+// Middleware
 app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
+  origin: "http://localhost:3000", // your React app
+  credentials: true                // allow cookies and credentials
 }));
 
 app.use(express.json());
 
+// Routes
 app.use("/api", authRoutes);
 
+// Connect to MongoDB and start server
 mongoose
   .connect(MONGO_URI)
   .then(() => {
