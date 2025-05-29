@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://authentication-sau6.onrender.com/api",
+  baseURL: "https://authentication-658c.onrender.com/api",
   withCredentials: true, // to handle cookies if needed
 });
 
