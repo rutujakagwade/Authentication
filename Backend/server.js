@@ -1,27 +1,28 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import { PORT, MONGO_URI } from "./config/config.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://authentication-gold-xi.vercel.app"  // your deployed frontend URL here
-];
-
+// Middleware
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests (Postman etc)
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
+  origin: "http://localhost:3000", // your React app
+  credentials: true                // allow cookies and credentials
 }));
 
-// your other middleware and routes here
+app.use(express.json());
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log('Server started');
-});
+// Routes
+app.use("/api", authRoutes);
+
+// Connect to MongoDB and start server
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => console.log("DB Connection Error:", err));
