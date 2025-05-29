@@ -1,22 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!location.state) {
       navigate("/login");
-    } else {
-      setUser(location.state);
     }
   }, [location, navigate]);
 
-  const handleLogout = () => {
-    navigate("/login");
-  };
+  const user = location.state;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -29,7 +24,7 @@ const Home = () => {
         <h1 className="text-2xl font-bold mb-2">Hello, {user?.name}</h1>
         <p className="mb-6">Welcome back! You're logged in.</p>
         <button
-          onClick={handleLogout}
+          onClick={() => navigate("/login")}
           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           Logout
