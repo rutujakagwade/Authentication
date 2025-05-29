@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -16,26 +16,15 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const res = await API.post("/login", input);
-      console.log("Login response:", res.data); // Debug log
-
       if (res.data.success) {
+        localStorage.setItem("user", JSON.stringify(res.data.user)); // <--- Save user here
         toast.success("Login successful!", {
           position: "top-right",
           autoClose: 2000,
         });
-
-        // Navigate immediately
-        navigate("/home");
-
-        // OR if you want delay, uncomment below and comment above
-        // setTimeout(() => navigate("/home"), 2000);
-      } else {
-        toast.error("Login failed: " + (res.data.message || "Unknown error"), {
-          position: "top-right",
-        });
+        setTimeout(() => navigate("/home"), 2500);
       }
     } catch (err) {
-      console.error("Login error:", err);
       toast.error("Login failed. Redirecting to Register...", {
         position: "top-right",
       });
@@ -49,9 +38,7 @@ const LoginForm = () => {
         onSubmit={handleLogin}
         className="max-w-md mx-auto mt-10 bg-white p-8 shadow-md rounded"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          Login
-        </h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Login</h2>
         <input
           type="email"
           name="email"

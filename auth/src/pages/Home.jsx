@@ -1,17 +1,25 @@
-import React, { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!location.state) {
+    const stored = localStorage.getItem("user");
+    if (!stored) {
       navigate("/login");
+    } else {
+      setUser(JSON.parse(stored));
     }
-  }, [location, navigate]);
+  }, [navigate]);
 
-  const user = location.state;
+ const handleLogout = () => {
+  localStorage.removeItem("user"); // clear user data on logout
+  navigate("/login");
+};
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -24,7 +32,7 @@ const Home = () => {
         <h1 className="text-2xl font-bold mb-2">Hello, {user?.name}</h1>
         <p className="mb-6">Welcome back! You're logged in.</p>
         <button
-          onClick={() => navigate("/login")}
+          onClick={handleLogout}
           className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           Logout
