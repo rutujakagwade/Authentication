@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (!stored) {
+    if (!location.state) {
       navigate("/login");
     } else {
-      setUser(JSON.parse(stored));
+      setUser(location.state);
     }
-  }, [navigate]);
+  }, [location, navigate]);
 
   const handleLogout = () => {
     navigate("/login");
