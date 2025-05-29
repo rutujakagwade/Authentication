@@ -17,7 +17,7 @@ const LoginForm = () => {
     try {
       const res = await API.post("/login", input);
       if (res.data.success) {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // Since token is stored in httpOnly cookie, no need to save user in localStorage
         toast.success("Login successful!", {
           position: "top-right",
           autoClose: 2000,

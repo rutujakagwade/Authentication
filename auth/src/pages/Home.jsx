@@ -15,7 +15,6 @@ const Home = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
     navigate("/login");
   };
 
