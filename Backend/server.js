@@ -9,7 +9,7 @@ const app = express();
 // Middleware
 app.use(cors({
   origin: "http://localhost:3000",
-  https:"//authentication-kohl-one.vercel.app/",
+  https:"https://authentication-self-ten.vercel.app/",
   
   // your React app
   credentials: true                // allow cookies and credentials
