@@ -1,6 +1,6 @@
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://authentication-gold-xi.vercel.app/"
+  "https://authentication-gold-xi.vercel.app"
 ];
 
 app.use(cors({
